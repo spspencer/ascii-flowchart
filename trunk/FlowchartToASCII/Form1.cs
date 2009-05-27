@@ -16,11 +16,14 @@ namespace FlowchartToASCII
     public partial class frmMain : Form
     {
         private Matrix m = new Matrix(new Size(1024, 1024));
+        //private Matrix m = new Matrix(new Size(1000, 1000));
         private char pointsymblol = 'o';
         private System.Drawing.Point? Selected1stPoint;
         private System.Drawing.Point? Selected2ndPoint;
         private Model model = new Model();
         private BaseType SelectedBox;
+        private string filename = "";
+
 
         public frmMain()
         {
@@ -310,42 +313,79 @@ namespace FlowchartToASCII
             }
         }
 
+        private void Save()
+        {
+            if (filename == "")
+            {
+                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                    filename = saveFileDialog1.FileName;
+            }
+            if (filename != "")
+            {
+                //Type t = typeof(Model);
+                BinaryFormatter bf = new BinaryFormatter();
+                //XmlSerializer xmls = new XmlSerializer(typeof(Model));
+                Stream sw = new FileStream(filename, FileMode.Create, FileAccess.Write);
+                bf.Serialize(sw, model);
+                //xmls.Serialize(sw, model);
+                sw.Close();
+            }
+        }
+
         private void button13_Click(object sender, EventArgs e)
         {
-            //Type t = typeof(Model);
-            BinaryFormatter bf = new BinaryFormatter();
-            //XmlSerializer xmls = new XmlSerializer(typeof(Model));
-            Stream sw = new FileStream(@"C:\umar.xml", FileMode.Create, FileAccess.Write);
-            bf.Serialize(sw, model);
-            //xmls.Serialize(sw, model);
-            sw.Close();
+            Save();
+        }
+        private void Open()
+        {
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                Stream sr = new FileStream(openFileDialog1.FileName, FileMode.Open, FileAccess.Read);
+                Model m1 = (Model)bf.Deserialize(sr);
+                m.Reset();
+
+                foreach (BaseType bo in m1.GetList)
+                {
+                    m.Add(bo);
+                    model.Add(bo);
+                }
+
+                txtDrawingBoard.Text = m.ToString();
+
+                sr.Close();
+                filename = openFileDialog1.FileName;
+                this.Text = "ASCII Flowchart: " + filename;
+            }
+            button12.Enabled = false;
+            button10.Enabled = false;
         }
 
         private void button11_Click(object sender, EventArgs e)
         {
-            BinaryFormatter bf = new BinaryFormatter();
-            //XmlSerializer xmls = new XmlSerializer(typeof(Model));
-            Stream sr = new FileStream(@"C:\umar.xml", FileMode.Open, FileAccess.Read);
-            
-            //xmls.Serialize(sw, model);
-            Model m1 = (Model)bf.Deserialize(sr);
-            List<BaseType> b1 = m1.GetList;
-            foreach (BaseType bo in b1)
-            {
-                m.Add(bo);
-                model.Add(bo);
-            }
-
-            txtDrawingBoard.Text = m.ToString();
-
-            sr.Close();
+            Open();
         }
+        
 
         private void button12_Click(object sender, EventArgs e)
         {
-
-            button12.Enabled = false;
-            button10.Enabled = false;
+            if (SelectedBox.type == CompType.box)
+            {
+                //model.Remove(SelectedBox);
+                BoxType bt = new BoxType();
+                bt.StartPt = GetLineAndPos();
+                bt.Text = SelectedBox.Text;
+                model.Add(bt);
+                m.Reset();
+                foreach (BaseType b in model.GetList)
+                {
+                    m.Add(b);
+                }
+                txtDrawingBoard.Text = m.ToString();
+                button12.Enabled = false;
+                button10.Enabled = false;
+            }
         }
+
     }
 }
