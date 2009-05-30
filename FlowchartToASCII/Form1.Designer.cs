@@ -51,6 +51,7 @@
             this.button13 = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.button14 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbHor)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbVer)).BeginInit();
@@ -235,7 +236,7 @@
             // 
             // button9
             // 
-            this.button9.Location = new System.Drawing.Point(12, 330);
+            this.button9.Location = new System.Drawing.Point(11, 308);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(75, 28);
             this.button9.TabIndex = 17;
@@ -246,7 +247,7 @@
             // button10
             // 
             this.button10.Enabled = false;
-            this.button10.Location = new System.Drawing.Point(12, 364);
+            this.button10.Location = new System.Drawing.Point(11, 342);
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(75, 28);
             this.button10.TabIndex = 18;
@@ -267,7 +268,7 @@
             // button12
             // 
             this.button12.Enabled = false;
-            this.button12.Location = new System.Drawing.Point(14, 404);
+            this.button12.Location = new System.Drawing.Point(12, 376);
             this.button12.Name = "button12";
             this.button12.Size = new System.Drawing.Size(72, 25);
             this.button12.TabIndex = 20;
@@ -289,11 +290,22 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // button14
+            // 
+            this.button14.Location = new System.Drawing.Point(11, 407);
+            this.button14.Name = "button14";
+            this.button14.Size = new System.Drawing.Size(73, 28);
+            this.button14.TabIndex = 22;
+            this.button14.Text = "Delete";
+            this.button14.UseVisualStyleBackColor = true;
+            this.button14.Click += new System.EventHandler(this.button14_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(663, 700);
+            this.Controls.Add(this.button14);
             this.Controls.Add(this.button13);
             this.Controls.Add(this.button12);
             this.Controls.Add(this.button11);
@@ -351,6 +363,7 @@
         private System.Windows.Forms.Button button13;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.Button button14;
 
     }
 }

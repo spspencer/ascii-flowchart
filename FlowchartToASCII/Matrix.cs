@@ -85,9 +85,28 @@ namespace FlowchartToASCII
                     }
                 }
             }
-            else if (b.type == CompType.link)
+            else if (b.type == CompType.Link)
             {
-
+                int Length = b.Text.Length;
+                int xEnd = 0;
+                if (b.Text.Contains("-"))
+                {
+                    for (int i = 1; i <= Length; i++)
+                    {
+                        _m[b.StartPt.Y, b.StartPt.X + i] = '-';
+                    }
+                }
+                else if (b.Text.Contains("|"))
+                {
+                    for (int i = 1; i <= Length; i++)
+                    {
+                        _m[b.StartPt.Y + i, b.StartPt.X] = '|';
+                    }
+                }
+            }
+            else if (b.type == CompType.Arrow || b.type == CompType.point)
+            {
+                _m[b.StartPt.Y, b.StartPt.X] = b.Text[0];
             }
         }
 
@@ -96,7 +115,7 @@ namespace FlowchartToASCII
             _m[ p.Y, p.X] = c;
         }
 
-        public void Add(System.Drawing.Point p1, System.Drawing.Point p2,char c)
+        public void Add(System.Drawing.Point p1, System.Drawing.Point p2, char c)
         {
             int xStart = 0;
             int xEnd = 0;
@@ -121,6 +140,7 @@ namespace FlowchartToASCII
                 }
             }
         }
+
         public void SetChar(System.Drawing.Point p, char c)
         {
             _m[p.Y, p.X] = c;

@@ -24,7 +24,14 @@ namespace FlowchartToASCII
 
         public void Remove(BaseType b)
         {
-            bList.Remove(b);
+            for (int x = 0; x < bList.Count; x++ )
+            {
+                if (b.Id == bList[x].Id)
+                {
+                    bList.RemoveAt(x);
+                    break;
+                }
+            }
         }
     }
 }
