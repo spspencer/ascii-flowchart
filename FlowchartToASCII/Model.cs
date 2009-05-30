@@ -29,7 +29,7 @@ namespace FlowchartToASCII
                 if (b.Id == bList[x].Id)
                 {
                     bList.RemoveAt(x);
-                    break;
+                    //break;
                 }
             }
         }

@@ -28,7 +28,6 @@ namespace FlowchartToASCII
 
         public BoxType()
         {
-            Id = Guid.NewGuid();
             type = CompType.box;
             Cols = 0;
             Rows = 0;
@@ -127,7 +126,6 @@ namespace FlowchartToASCII
 
         public LinkType()
         {
-            Id = Guid.NewGuid();
             type = CompType.Link;
         }
 
@@ -174,10 +172,10 @@ namespace FlowchartToASCII
 
             if (Text.Contains('-'))
             {
-                return StartPt.X < pTest.X ? (StartPt.X + Text.Length) > pTest.X ? true : false : false;
+                return StartPt.X < pTest.X ? (StartPt.X + Text.Length) > pTest.X ? StartPt.Y == pTest.Y ? true : false : false : false;
             }
             else
-                return StartPt.Y < pTest.Y ? (StartPt.Y + Text.Length) > pTest.Y ? true: false :false;
+                return StartPt.Y < pTest.Y ? (StartPt.Y + Text.Length) > pTest.Y ? StartPt.X == pTest.X ? true : false : false : false;
 
             return status;
         }
@@ -190,7 +188,6 @@ namespace FlowchartToASCII
     {
         public ArrowType()
         {
-            Id = Guid.NewGuid();
             type = CompType.Arrow;
         }
 
@@ -218,7 +215,6 @@ namespace FlowchartToASCII
     {
         public PointType()
         {
-            Id = Guid.NewGuid();
             type = CompType.point;
         }
 
