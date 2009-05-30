@@ -125,8 +125,9 @@ namespace FlowchartToASCII
             }
             else if (CheckRight(p))
             {
-                m.SetChar(new Point(p.X - 1, p.Y), '>');
+                //m.SetChar(new Point(p.X - 1, p.Y), '>');
                 p.X = p.X - 1;
+                c = '>';
             }
             else if (CheckRightAdj(p))
             {
