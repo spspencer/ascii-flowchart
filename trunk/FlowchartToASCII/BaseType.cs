@@ -7,11 +7,12 @@ namespace FlowchartToASCII
 {
     
     [Serializable]
-    public enum CompType{ box, link, point };
+    public enum CompType{ box, Link, Arrow, point };
 
     [Serializable]
     public abstract class  BaseType
     {
+        public Guid Id;
         public CompType type;
         public string Text;
         public System.Drawing.Point StartPt;
@@ -27,6 +28,8 @@ namespace FlowchartToASCII
 
         public BoxType()
         {
+            Id = Guid.NewGuid();
+            type = CompType.box;
             Cols = 0;
             Rows = 0;
             height = 0;
@@ -35,6 +38,7 @@ namespace FlowchartToASCII
 
         public BoxType(System.Drawing.Point p, string str)
         {
+            Id = Guid.NewGuid();
             type = CompType.box;
             Text = str;
             StartPt = p;
@@ -113,4 +117,126 @@ namespace FlowchartToASCII
         }
     }
 
+    [Serializable]
+    public class LinkType
+        :BaseType
+    {
+        int Length;
+        char c;
+        System.Drawing.Point EndPt;
+
+        public LinkType()
+        {
+            Id = Guid.NewGuid();
+            type = CompType.Link;
+        }
+
+        public LinkType(System.Drawing.Point p1, System.Drawing.Point p2, char c)
+        {
+            Id = Guid.NewGuid();
+            type = CompType.Link;
+            int xStart = 0;
+            int xEnd = 0;
+            if (c == '-')
+            {
+                StartPt = p1.X < p2.X ? p1 : p2;
+                EndPt = p1.X > p2.X ? p1 : p2;
+                xStart = p1.X > p2.X ? p2.X : p1.X;
+                xEnd = p1.X < p2.X ? p2.X : p1.X;
+                Text = "";
+                for (int i = xStart + 1; i < xEnd; i++)
+                {
+                    Text = Text + c.ToString();
+                }
+            }
+            else if (c == '|')
+            {
+                StartPt = p1.Y < p2.Y ? p1 : p2;
+                EndPt = p1.Y > p2.Y ? p1 : p2;
+                xStart = p1.Y > p2.Y ? p2.Y : p1.Y;
+                xEnd = p1.Y < p2.Y ? p2.Y : p1.Y;
+
+                for (int i = xStart + 1; i < xEnd; i++)
+                {
+                    Text = Text + c.ToString();
+                }
+            }
+        }
+
+        public override string Draw()
+        {
+            return Text;
+        }
+
+        public override bool Detect(System.Drawing.Point pTest)
+        {
+            bool status = false;
+
+            if (Text.Contains('-'))
+            {
+                return StartPt.X < pTest.X ? (StartPt.X + Text.Length) > pTest.X ? true : false : false;
+            }
+            else
+                return StartPt.Y < pTest.Y ? (StartPt.Y + Text.Length) > pTest.Y ? true: false :false;
+
+            return status;
+        }
+    }
+
+
+    [Serializable]
+    public class ArrowType
+        : BaseType
+    {
+        public ArrowType()
+        {
+            Id = Guid.NewGuid();
+            type = CompType.Arrow;
+        }
+
+        public ArrowType(System.Drawing.Point p, string str)
+        {
+            Id = Guid.NewGuid();
+            type = CompType.Arrow;
+            Text = str;
+            StartPt = p;
+        }
+        public override string Draw()
+        {
+            return Text;
+        }
+
+        public override bool Detect(System.Drawing.Point pTest)
+        {
+            return StartPt == pTest ? true : false;
+        }
+    }
+
+    [Serializable]
+    public class PointType
+        : BaseType
+    {
+        public PointType()
+        {
+            Id = Guid.NewGuid();
+            type = CompType.point;
+        }
+
+        public PointType(System.Drawing.Point p, string str)
+        {
+            Id = Guid.NewGuid();
+            type = CompType.point;
+            Text = str;
+            StartPt = p;
+        }
+        public override string Draw()
+        {
+            return Text;
+        }
+
+        public override bool Detect(System.Drawing.Point pTest)
+        {
+            return StartPt == pTest ? true : false;
+        }
+    }
 }

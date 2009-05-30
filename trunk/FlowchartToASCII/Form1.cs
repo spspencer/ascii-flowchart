@@ -49,8 +49,11 @@ namespace FlowchartToASCII
 
         private void button2_Click(object sender, EventArgs e)
         {
-            m.Add(pointsymblol, GetLineAndPos());
+            PointType p = new PointType(GetLineAndPos(), pointsymblol.ToString());
+            m.Add(p);
+            /*m.Add(pointsymblol, GetLineAndPos());*/
             txtDrawingBoard.Text = m.ToString();
+            model.Add(p);
         }
 
 
@@ -74,15 +77,22 @@ namespace FlowchartToASCII
 
         private void AddLink()
         {
+           
             if (CheckHorizontal())
             {
-                m.Add(new Point(Selected1stPoint.Value.X, Selected1stPoint.Value.Y), new Point(Selected2ndPoint.Value.X,Selected2ndPoint.Value.Y), '-');
+                LinkType l = new LinkType(new Point(Selected1stPoint.Value.X, Selected1stPoint.Value.Y), new Point(Selected2ndPoint.Value.X, Selected2ndPoint.Value.Y), '-');
+                //m.Add(new Point(Selected1stPoint.Value.X, Selected1stPoint.Value.Y), new Point(Selected2ndPoint.Value.X,Selected2ndPoint.Value.Y), '-');
+                m.Add(l);
                 txtDrawingBoard.Text = m.ToString();
+                model.Add(l);
             }
             else if (CheckVertical())
             {
-                m.Add(new Point(Selected1stPoint.Value.X, Selected1stPoint.Value.Y), new Point(Selected2ndPoint.Value.X, Selected2ndPoint.Value.Y), '|');
+                LinkType l = new LinkType(new Point(Selected1stPoint.Value.X, Selected1stPoint.Value.Y), new Point(Selected2ndPoint.Value.X, Selected2ndPoint.Value.Y), '|');
+                m.Add(l);
+                //m.Add(new Point(Selected1stPoint.Value.X, Selected1stPoint.Value.Y), new Point(Selected2ndPoint.Value.X, Selected2ndPoint.Value.Y), '|');
                 txtDrawingBoard.Text = m.ToString();
+                model.Add(l);
             }
         }
 
@@ -99,28 +109,42 @@ namespace FlowchartToASCII
 
         public void AddArrow()
         {
+            char c = '\0';
             Point p = GetLineAndPos();
 
 
             if (CheckUp(p))
             {
-                m.SetChar(p, '^');
+                //m.SetChar(p, '^');
+                c = '^';
             }
             else if (CheckDown(p))
             {
-                m.SetChar(p, 'v');
+                //m.SetChar(p, 'v');
+                c = 'v';
             }
             else if (CheckRight(p))
             {
                 m.SetChar(new Point(p.X - 1, p.Y), '>');
+                p.X = p.X - 1;
             }
             else if (CheckRightAdj(p))
             {
-                m.SetChar(p, '>');
+                //m.SetChar(p, '>');
+                c = '>';
             }
             else if (CheckLeft(p))
             {
-                m.SetChar(p, '<');
+                //m.SetChar(p, '<');
+                c = '<';
+            }
+            if (c != '\0')
+            {
+                ArrowType A = new ArrowType(p, c.ToString());
+                m.Add(A);
+                txtDrawingBoard.Text = m.ToString();
+                model.Add(A);
+
             }
         }
 
@@ -308,6 +332,7 @@ namespace FlowchartToASCII
                     SelectedBox = b;
                     button10.Enabled = true;
                     button12.Enabled = true;
+                    button14.Enabled = true;
                     break;
                 }
             }
@@ -359,6 +384,7 @@ namespace FlowchartToASCII
             }
             button12.Enabled = false;
             button10.Enabled = false;
+            button14.Enabled = false;
         }
 
         private void button11_Click(object sender, EventArgs e)
@@ -381,10 +407,38 @@ namespace FlowchartToASCII
                 {
                     m.Add(b);
                 }
+                /*m.Add(bt);*/
                 txtDrawingBoard.Text = m.ToString();
                 button12.Enabled = false;
                 button10.Enabled = false;
+                button14.Enabled = false;
             }
+            else
+            {
+                LinkType l = new LinkType();
+                l.Text = SelectedBox.Text;
+                l.StartPt = GetLineAndPos();
+                model.Add(l);
+                m.Add(l);
+                txtDrawingBoard.Text = m.ToString();
+                button12.Enabled = false;
+                button10.Enabled = false;
+                button14.Enabled = false;
+            }
+        }
+
+        private void button14_Click(object sender, EventArgs e)
+        {
+            model.Remove(SelectedBox);
+            m.Reset();
+            foreach (BaseType b in model.GetList)
+            {
+                m.Add(b);
+            }
+            txtDrawingBoard.Text = m.ToString();
+            button12.Enabled = false;
+            button10.Enabled = false;
+            button14.Enabled = false;
         }
 
     }
